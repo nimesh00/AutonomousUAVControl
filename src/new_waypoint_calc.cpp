@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
     ros::Subscriber current_coords_sub = nh.subscribe<geometry_msgs::PoseStamped>
             ("/mavros/local_position/pose", 10, curr_coords_cb);
 
-    ros::Rate rate(100.0);
+    ros::Rate rate(10.0);
 
     new_home.header.stamp = ros::Time::now();
     new_home.geo.latitude = 13.0257405;
@@ -76,14 +76,15 @@ int main(int argc, char **argv) {
                                                                     new_home.geo.altitude);
 
     
-    float geo_points[4][4] = {{13.027439, 77.563226}, {13.027324, 77.564546}, {13.026796, 77.564435}, {13.027029, 77.563604}};
-
+    float geo_points[4][2] = {{13.027439, 77.563226}, {13.027324, 77.564546}, {13.026796, 77.564435}, {13.027029, 77.563604}};
+    // float local_points[4][3] = {{75.625, -24.375, 20}, {-63.375, 9.625, 20}, {-49.625, 20.125, 20}, {37.375, -5.375, 20}};
+    float local_points[4][3] = {{20, -20, 20}, {-20, 20, 20}, {20, 20, 20}, {-20, 20, 20}};
     int i = 0;
 
     float distance_to_current = 0.0;
 
     while(ros::ok()) {
-
+        home_pos_pub.publish(new_home);
         float *next_coordinates = (float*)malloc(sizeof(geo_points[0]));
 
         next_coordinates = geo_points[i];
@@ -97,9 +98,13 @@ int main(int argc, char **argv) {
         geometry_msgs::PoseStamped new_cartesian_coords;
 
         new_cartesian_coords.header.stamp = ros::Time::now();
-        new_cartesian_coords.pose.position.x = local_coords->x;
-        new_cartesian_coords.pose.position.y = local_coords->y;
-        new_cartesian_coords.pose.position.z = local_coords->z;
+        // new_cartesian_coords.pose.position.x = local_coords->x;
+        // new_cartesian_coords.pose.position.y = local_coords->y;
+        // new_cartesian_coords.pose.position.z = local_coords->z;
+
+        new_cartesian_coords.pose.position.x = local_points[i][0];
+        new_cartesian_coords.pose.position.y = local_points[i][1];
+        new_cartesian_coords.pose.position.z = local_points[i][2];
 
         cout << "New waypoint given: " << new_cartesian_coords.pose.position.x
                                         << new_cartesian_coords.pose.position.y
