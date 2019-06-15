@@ -133,12 +133,12 @@ int main(int argc, char **argv)
     while(ros::ok()){
         if( current_state.mode != "GUIDED" &&
             (ros::Time::now() - last_request > ros::Duration(2.0))){
-            ROS_INFO("Change to guided mode!!")
+            ROS_INFO("Change to guided mode!!");
             last_request = ros::Time::now();
         } else {
             if( !current_state.armed &&
                 (ros::Time::now() - last_request > ros::Duration(2.0))){
-                ROS_INFO("Arm the Vehicle!!")
+                ROS_INFO("Arm the Vehicle!!");
                 last_request = ros::Time::now();
             }
         }
