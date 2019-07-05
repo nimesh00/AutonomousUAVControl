@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
     ros::Publisher home_pos_pub = nh.advertise<mavros_msgs::HomePosition>("/mavors/home_position/set", 10);
     ros::Publisher updated_coordinates = nh.advertise<geometry_msgs::PoseStamped>("/updated_coordinates", 10);
     ros::Subscriber current_coords_sub = nh.subscribe<geometry_msgs::PoseStamped>
-            ("/mavros/local_position/pose", 10, curr_coords_cb);
+            ("/uav1/mavros/local_position/pose", 10, curr_coords_cb);
 
     ros::Rate rate(10.0);
 
@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
     
     float geo_points[4][2] = {{13.027439, 77.563226}, {13.027324, 77.564546}, {13.026796, 77.564435}, {13.027029, 77.563604}};
     // float local_points[4][3] = {{75.625, -24.375, 20}, {-63.375, 9.625, 20}, {-49.625, 20.125, 20}, {37.375, -5.375, 20}};
-    float local_points[4][3] = {{20, -20, 20}, {-20, 20, 20}, {20, 20, 20}, {-20, 20, 20}};
+    float local_points[4][3] = {{20, 0, 7}, {20, 20, 7}, {20, 10, 7}, {-10, 20, 7}};
     int i = 0;
 
     float distance_to_current = 0.0;
@@ -113,7 +113,7 @@ int main(int argc, char **argv) {
         updated_coordinates.publish(new_cartesian_coords);
         distance_to_current = distance_between_cartesian_points(new_cartesian_coords, current_coordinates);
 
-        if (distance_to_current <= 0.5) {
+        if (distance_to_current <= 5) {
             i = (i + 1) % 4;
         }
         ros::spinOnce();

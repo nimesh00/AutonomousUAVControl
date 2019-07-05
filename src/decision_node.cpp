@@ -143,7 +143,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (got_new_coordinates == 1 && distance_to_next <= 0.5) {
+        if (got_new_coordinates == 1 && distance_to_next <= 5) {
             pose = updated_coords;
             pose1.position.x = pose.pose.position.x;
             pose1.position.y = pose.pose.position.y;

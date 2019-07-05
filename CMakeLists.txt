@@ -136,6 +136,7 @@ include_directories(
 add_executable(offb_node src/offb_node.cpp)
 add_executable(decision_node src/decision_node.cpp)
 add_executable(new_waypoint_publisher src/new_waypoint_calc.cpp)
+add_executable(px4_control_node src/px4_control_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -155,6 +156,9 @@ target_link_libraries(decision_node
   ${catkin_LIBRARIES}
 )
 target_link_libraries(new_waypoint_publisher
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(px4_control_node
   ${catkin_LIBRARIES}
 )
 
