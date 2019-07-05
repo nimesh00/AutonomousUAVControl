@@ -12,7 +12,6 @@
 #include <mavros_msgs/SetMode.h>
 #include <mavros_msgs/State.h>
 #include <math.h>
-#include <stdlib.h>
 #include <vector>
 
 using namespace std;
@@ -33,7 +32,6 @@ void new_coords_cb(const geometry_msgs::PoseStamped::ConstPtr& msg) {
     if (!(last_coords.pose.position.x == updated_coords.pose.position.x &&
         last_coords.pose.position.y == updated_coords.pose.position.y &&
         last_coords.pose.position.z == updated_coords.pose.position.z)) {
-            updated_coords_msgs.push_back(msg);
             got_new_coordinates = 1;
         }
 }
@@ -149,13 +147,6 @@ int main(int argc, char **argv)
     float angle = 0.0;
     float correction_rate = 2.0;
     
-    // cout << "starting menory allocation!!" << endl;
-    // geometry_msgs::PoseStamped *wayPoints = (geometry_msgs::PoseStamped*)malloc(sizeof(geometry_msgs::PoseStamped));
-    // if (wayPoints == NULL) {
-    //     cout << "couldn't initialize waypoint memory block!" << endl;
-    // } else {
-    //     cout << "memory initalized successfully" << endl;
-    // }
     int wp_no = 0;
 
     while(ros::ok()){
@@ -177,36 +168,14 @@ int main(int argc, char **argv)
             }
         }
 
-        if (got_new_coordinates == 1) {
-
-            cout << "Got new coordinates!" << endl;
-
-            // static int current_size = sizeof(wayPoints) / sizeof(geometry_msgs::PoseStamped);
-
-            // cout << "Current size: " << current_size;
-            
-            // wayPoints = (geometry_msgs::PoseStamped*)realloc(wayPoints, (current_size + 1) * sizeof(geometry_msgs::PoseStamped));
-            // wayPoints = (geometry_msgs::PoseStamped*)realloc(wayPoints, (current_size + 1) * sizeof(*wayPoints));
-            // if (wayPoints == NULL) {
-            //     cout << "Problem resizing the memory block!" << endl;
-            // } else {
-            //     cout << "Resizing done successfully" << endl;
-            // }
-            // // cout << *wayPoints << endl;
-            // // cout << wayPoints[current_size] << endl;
-            // // *(wayPoints + current_size) = updated_coords;
+        if (got_new_coordinates == 1 && distance_to_next <= 0.5) {
+            pose = updated_coords;
+            pose1.position.x = pose.pose.position.x;
+            pose1.position.y = pose.pose.position.y;
+            pose1.position.z = pose.pose.position.z;
+            pose1.header.stamp = ros::Time::now();
+            cout << "Got new Coordinates" << pose.pose.position.x << pose.pose.position.y << pose.pose.position.z << endl;
             got_new_coordinates = 0;
-        }
-        if (distance_to_next <= 0.5) {
-            // pose = updated_coords;
-            cout << *updated_coords_msgs[wp_no];
-            cout << updated_coords_msgs.size();
-            pose = *updated_coords_msgs[wp_no++];
-            // pose1.position.x = pose.pose.position.x;
-            // pose1.position.y = pose.pose.position.y;
-            // pose1.position.z = pose.pose.position.z;
-            // pose1.header.stamp = ros::Time::now();
-            cout << "Got new Coordinates" << pose.pose.position.x << pose.pose.position.y << pose.pose.position.z << endl;    
         }
 
         // cout << "Total waypoints: " << sizeof(wayPoints) / sizeof(geometry_msgs::PoseStamped) << endl;

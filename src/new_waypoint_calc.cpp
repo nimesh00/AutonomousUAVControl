@@ -116,6 +116,7 @@ int main(int argc, char **argv) {
         if (distance_to_current <= 5) {
             i = (i + 1) % 4;
         }
+        // i = (i + 1) % 4;
         ros::spinOnce();
         rate.sleep();
     }
