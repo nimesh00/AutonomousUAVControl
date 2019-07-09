@@ -141,7 +141,8 @@ int main(int argc, char **argv) {
         coords_msg.pose.position.z = (float)lawn_mower_matrix[i][2];
         cartestian_distance = distance_between_cartesian_points(current_coordinates, coords_msg);
         // ROS_INFO("I sent: [%.2f] X Coordinate and [%.2f] Y Coordinate\n", coords_msg.pose.position.x, coords_msg.pose.position.y);
-        cout << coords_msg;
+        // cout << coords_msg;
+        cout << cartestian_distance << endl;
         chatter_pub.publish(coords_msg);
         if (cartestian_distance <= 0.5)
          {

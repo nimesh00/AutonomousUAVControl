@@ -207,7 +207,7 @@ def position_control():
 
 
 if __name__=="__main__":
-    settings = termios.tcgetattr(sys.stdin)
+    	settings = termios.tcgetattr(sys.stdin)
 	
 	# mavros.set_namespace("/uav1/mavros")
 	pub = rospy.Publisher("/uav1/mavros/setpoint_velocity/cmd_vel_unstamped",Twist,queue_size=100)
@@ -249,131 +249,52 @@ if __name__=="__main__":
 	T = threading.Thread(target = persistVel)
 	T.start()
 	#####################################################teleop mode
-	try:
-		print(msg)
-		print(vels(speed,turn))
-		while not rospy.is_shutdown():
-			key = getKey()
-			if key in moveBindings.keys():
-				x = -1*moveBindings[key][1]
-				y = moveBindings[key][0]
-				z = moveBindings[key][2]
-				th = moveBindings[key][3]
-
-
-			elif key in speedBindings.keys():
-				speed = speed * speedBindings[key][0]
-				turn = turn * speedBindings[key][1]
-
-				print(vels(speed,turn))
-				if (status == 14):
-					print(msg)
-				status = (status + 1) % 15
-
-			elif(key == 'y'):
-			    print("Armed")
-			    arming()
-
-			elif(key == '0'):
-			    print("Exiting")
-			    T.do_run = False
-			    T.join()
-			    sys.exit(0)
-
-			else:
-				x = 0
-				y = 0
-				z = 0
-				th = 0
-				if (key == '\x03'):
-					break
-
-			body = PositionTarget()
-			body.velocity.x = x*speed; body.velocity.y = y*speed; body.velocity.z = z*speed;
-			body.yaw_rate = th*turn
-			# body.yaw = 1
-			body.header.stamp = rospy.get_rostime()
-			body.header.frame_id ="world"
-			body.coordinate_frame =8
-			body.type_mask = int('011111000111', 2)
-			pub1.publish(body)
-
-	except Exception as e:
-		print(e)
-
-	finally:
-		body = PositionTarget()
-		body.velocity.x = 0; body.velocity.y = 0; body.velocity.z = 0;
-		body.yaw_rate =th*turn
-		# body.yaw = 1
-		# twist.angular.x = 0; twist.angular.y = 0; twist.angular.z = th*turn
-		body.header.stamp = rospy.get_rostime()
-		body.header.frame_id ="world"
-		body.coordinate_frame =8
-		body.type_mask = int('011111000111', 2)
-		pub1.publish(body)
-		T.join()
-    	termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-
-###############################################################################control mode
 	# try:
-	# 	for i in range(15):
-	# 		# print(msg)
-	# 		rate = rospy.Rate(20.0)
-	# 		x=0
-	# 		y=0
-	# 		z=5
-	# 		th = 0
-	# 		speed = 2
-	# 		turn = 0
-	# 		body = PositionTarget()
-	# 		body.velocity.x = x*speed; body.velocity.y = y*speed; body.velocity.z = z*speed;
-	# 		# body.yaw_rate = th*turn
-	# 		body.head1/mavros/cmer.stamp = rospy.get_rostime()
-	# 		body.header.frame_id ="world"
-	# 		body.coordinate_frame =8
-	# 		body.type_mask = int('011111000111', 2)
-	# 		pub1.publish(body)
-	# 		# print(vels(speed,turn))
-	# 		rate.sleep()
-	# 		x=0
-	# 		y=0
-	# 		z=0
-	# 		th=0
-	# 		body = PositionTarget()
-	# 		body.velocity.x = x*speed; body.velocity.y = y*speed; body.velocity.z = z*speed;
-	# 		# body.yaw_rate = th*turn
-	# 		body.header.stamp = rospy.get_rostime()
-	# 		body.header.frame_id ="world"
-	# 		body.coordinate_frame =8
-	# 		body.type_mask = int('011111000111', 2)
-	# 		pub1.publish(body)
-	# 		# print(vels(speed,turn))
-	# 		# takeoff()
 	# 	print(msg)
 	# 	print(vels(speed,turn))
 	# 	while not rospy.is_shutdown():
-	# 		if desired_pitch==1:
-	# 			x = desired_x
-	# 			y = desired_y 
+	# 		key = getKey()
+	# 		if key in moveBindings.keys():
+	# 			x = -1*moveBindings[key][1]
+	# 			y = moveBindings[key][0]
+	# 			z = moveBindings[key][2]
+	# 			th = moveBindings[key][3]
+
+
+	# 		elif key in speedBindings.keys():
+	# 			speed = speed * speedBindings[key][0]
+	# 			turn = turn * speedBindings[key][1]
+
+	# 			print(vels(speed,turn))
+	# 			if (status == 14):
+	# 				print(msg)
+	# 			status = (status + 1) % 15
+
+	# 		elif(key == 'y'):
+	# 		    print("Armed")
+	# 		    arming()
+
+	# 		elif(key == '0'):
+	# 		    print("Exiting")
+	# 		    T.do_run = False
+	# 		    T.join()
+	# 		    sys.exit(0)
+
 	# 		else:
-	# 			x = -1*desired_y
-	# 			y = desired_x
-	# 		z = desired_z
-	# 		th = desired_yaw
-			
-	# 		speed = 1
-	# 		turn = 1
+	# 			x = 0
+	# 			y = 0
+	# 			z = 0
+	# 			th = 0
+	# 			if (key == '\x03'):
+	# 				break
 
 	# 		body = PositionTarget()
 	# 		body.velocity.x = x*speed; body.velocity.y = y*speed; body.velocity.z = z*speed;
 	# 		body.yaw_rate = th*turn
+	# 		# body.yaw = 1
 	# 		body.header.stamp = rospy.get_rostime()
 	# 		body.header.frame_id ="world"
-	# 		if desired_pitch==1:
-	# 			body.coordinate_frame =1
-	# 		else:
-	# 			body.coordinate_frame =8
+	# 		body.coordinate_frame =8
 	# 		body.type_mask = int('011111000111', 2)
 	# 		pub1.publish(body)
 
@@ -383,16 +304,122 @@ if __name__=="__main__":
 	# finally:
 	# 	body = PositionTarget()
 	# 	body.velocity.x = 0; body.velocity.y = 0; body.velocity.z = 0;
-	# 	body.yaw_rate = 0
+	# 	body.yaw_rate =th*turn
+	# 	# body.yaw = 1
+	# 	# twist.angular.x = 0; twist.angular.y = 0; twist.angular.z = th*turn
 	# 	body.header.stamp = rospy.get_rostime()
 	# 	body.header.frame_id ="world"
-	# 	if desired_pitch==1:
-	# 		body.coordinate_frame =1
-	# 	else:
-	# 		body.coordinate_frame =8
+	# 	body.coordinate_frame =8
 	# 	body.type_mask = int('011111000111', 2)
 	# 	pub1.publish(body)
+	#     T.join()
+
+ #    		termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+###############################################################################control mode
+	try:
+		for i in range(15):
+			# print(msg)
+			rate = rospy.Rate(20.0)
+			x=0
+			y=0
+			z=5
+			th = 0
+			speed = 2
+			turn = 0
+			body = PositionTarget()
+			body.velocity.x = x*speed; body.velocity.y = y*speed; body.velocity.z = z*speed;
+			# body.yaw_rate = th*turn
+			body.header.stamp = rospy.get_rostime()
+			body.header.frame_id ="world"
+			body.coordinate_frame =8
+			body.type_mask = int('011111000111', 2)
+			pub1.publish(body)
+			# print(vels(speed,turn))
+			rate.sleep()
+			x=0
+			y=0
+			z=0
+			th=0
+			body = PositionTarget()
+			body.velocity.x = x*speed; body.velocity.y = y*speed; body.velocity.z = z*speed;
+			# body.yaw_rate = th*turn
+			body.header.stamp = rospy.get_rostime()
+			body.header.frame_id ="world"
+			body.coordinate_frame =8
+			body.type_mask = int('011111000111', 2)
+			pub1.publish(body)
+			# print(vels(speed,turn))
+			# takeoff()
+		print(msg)
+		print(vels(speed,turn))
+		while not rospy.is_shutdown():
+			if desired_pitch==1:
+				x = desired_x
+				y = desired_y 
+			else:
+				x = -1*desired_y
+				y = desired_x
+			z = desired_z
+			th = desired_yaw
+			
+			speed = 1
+			turn = 1
+
+			body = PositionTarget()
+			body.velocity.x = x*speed; body.velocity.y = y*speed; body.velocity.z = z*speed;
+			body.yaw_rate = th*turn
+			body.header.stamp = rospy.get_rostime()
+			body.header.frame_id ="world"
+			if desired_pitch==1:
+				body.coordinate_frame =1
+			else:
+				body.coordinate_frame =8
+			body.type_mask = int('011111000111', 2)
+			# pub1.publish(body)
+
+	except Exception as e:
+		print(e)
+
+	finally:
+		body = PositionTarget()
+		body.velocity.x = 0; body.velocity.y = 0; body.velocity.z = 0;
+		body.yaw_rate = 0
+		body.header.stamp = rospy.get_rostime()
+		body.header.frame_id ="world"
+		if desired_pitch==1:
+			body.coordinate_frame =1
+		else:
+			body.coordinate_frame =8
+		body.type_mask = int('011111000111', 2)
+		# pub1.publish(body)
+		T.join()
+
+    		termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+########################################################################################pos control
+	# try:
+	# 	print(msg)
+	# 	print(vels(speed,turn))
+	# 	while not rospy.is_shutdown():
+	# 		x = des_pos_x
+	# 		y = des_pos_y
+	# 		z = des_pos_z
+
+	# 		speed = 1
+	# 		turn = 1
+
+	# 		body = PoseStamped()
+	# 		body.pose.position.x = x*speed; body.pose.position.y = y*speed; body.pose.position.z = z*speed;
+
+	# 		local_pos_pub.publish(body)
+
+	# except Exception as e:
+	# 	print(e)
+
+	# finally:
+	# 	body = PoseStamped()
+	# 	body.pose.position.x = 0; body.pose.position.y =0; body.pose.position.z = 0;
+
+	# 	local_pos_pub.publish(body)
 	# 	T.join()
 
-    # 		termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-
+	# 	termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)

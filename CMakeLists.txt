@@ -137,6 +137,11 @@ add_executable(offb_node src/offb_node.cpp)
 add_executable(decision_node src/decision_node.cpp)
 add_executable(new_waypoint_publisher src/new_waypoint_calc.cpp)
 add_executable(px4_control_node src/px4_control_node.cpp)
+add_executable(talker src/talker.cpp)
+add_executable(lawn_mower src/lawn_mower.cpp)
+add_executable(mbzirc_1_control src/mbzirc_1_control.cpp)
+add_executable(mbzirc_2_control src/mbzirc_2_control.cpp)
+add_executable(mbzirc_3_control src/mbzirc_3_control.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -162,6 +167,21 @@ target_link_libraries(px4_control_node
   ${catkin_LIBRARIES}
 )
 
+target_link_libraries(talker
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(lawn_mower
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(mbzirc_1_control
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(mbzirc_2_control
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(mbzirc_3_control
+  ${catkin_LIBRARIES}
+)
 #############
 ## Install ##
 #############

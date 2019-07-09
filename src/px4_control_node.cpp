@@ -115,7 +115,7 @@ int main(int argc, char **argv)
                      mavros_msgs::PositionTarget::IGNORE_AFY |
                      mavros_msgs::PositionTarget::IGNORE_AFZ |
                      mavros_msgs::PositionTarget::FORCE |
-                     mavros_msgs::PositionTarget::IGNORE_YAW;
+                     mavros_msgs::PositionTarget::IGNORE_YAW_RATE;
     pose1.header.stamp = ros::Time::now();
 
     // pose1.position.x = 0;
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
     // pose1.position.z = 2;
     // pose1.yaw_rate = 1;
 
-    geometry_msgs::PoseStamped pose;
+    geometry_msgs::PoseStamped pose, last_coords;
     pose.pose.position.x = 0;
     pose.pose.position.y = 0;
     pose.pose.position.z = 2;
@@ -169,11 +169,11 @@ int main(int argc, char **argv)
         }
 
         if (got_new_coordinates == 1 && distance_to_next <= 0.5) {
+            last_coords = pose;
             pose = updated_coords;
-            pose1.position.x = pose.pose.position.x;
-            pose1.position.y = pose.pose.position.y;
-            pose1.position.z = pose.pose.position.z;
-            pose1.header.stamp = ros::Time::now();
+            // pose1.position.x = pose.pose.position.x;
+            // pose1.position.y = pose.pose.position.y;
+            // pose1.position.z = pose.pose.position.z;
             cout << "Got new Coordinates" << pose.pose.position.x << pose.pose.position.y << pose.pose.position.z << endl;
             got_new_coordinates = 0;
         }
@@ -188,12 +188,37 @@ int main(int argc, char **argv)
         cout << "distance to nexy waypoint: " << distance_to_next << endl;
 
         
-        float delta_z = abs(pose.pose.position.z - current_coordinates.pose.position.z);
+        float delta_z = pose.pose.position.z - current_coordinates.pose.position.z;
+        // float delta_zi = pose.pose.position.z - last_coords.pose.position.z;
 
-        if (!((distance_to_next - delta_z) < 1)) {
+        // int z_direction = delta_z / abs(delta_z) + 0.5;
+        float length_vector = distance_between_cartesian_points(last_coords, pose);
+        float delta_x = pose.pose.position.x - last_coords.pose.position.x;
+        float delta_y = pose.pose.position.y - last_coords.pose.position.y;
+        float delta_zi = pose.pose.position.z - last_coords.pose.position.z;
+        if (delta_x != 0) {
+            pose1.velocity.y = delta_x;
+        }
+        else if (delta_y != 0) {
+            pose1.velocity.y = delta_y;
+        }
+        else {
+            pose1.velocity.y = 0;
+        }
+        pose1.velocity.x = 0;
+        if (abs(delta_z) == 0) {
+            pose1.velocity.z = 0;
+        }
+        else {
+            pose1.velocity.z = 0.5 * delta_z;
+        }
+
+        cout << "velocity: " << pose1.velocity.x << "\t" << pose1.velocity.y << "\t" << pose1.velocity.z << endl;
+
+        if (!((distance_to_next - abs(delta_z)) < 0.5)) {
             pose.pose.orientation.z = quarternions.pose.orientation.z;
             pose.pose.orientation.w = quarternions.pose.orientation.w;
-            // pose1.yaw = angle;
+            pose1.yaw = angle;
             // pose1.yaw_rate = angle * (correction_rate / M_PI);    
         }
         
