@@ -142,6 +142,8 @@ add_executable(lawn_mower src/lawn_mower.cpp)
 add_executable(mbzirc_1_control src/mbzirc_1_control.cpp)
 add_executable(mbzirc_2_control src/mbzirc_2_control.cpp)
 add_executable(mbzirc_3_control src/mbzirc_3_control.cpp)
+add_executable(survivor_detector src/survivor_detector.cpp)
+add_executable(position_control_px4 src/position_control_px4.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -180,6 +182,12 @@ target_link_libraries(mbzirc_2_control
   ${catkin_LIBRARIES}
 )
 target_link_libraries(mbzirc_3_control
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(survivor_detector
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(position_control_px4
   ${catkin_LIBRARIES}
 )
 #############
