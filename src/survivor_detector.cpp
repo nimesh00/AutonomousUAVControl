@@ -109,15 +109,15 @@ bool inside_observer_radius(nav_msgs::Odometry location) {
 
 int main(int argc, char **argv) {
 
-    ros::init(argc, argv, "lawn_mower");
+    ros::init(argc, argv, "survivor_detector");
     ros::NodeHandle nh;
 
     // ros::Subscriber home_sub = nh.subscribe<mavros_msgs::HomePosition>("/mavros/home_position/home", 10, home_cb);
     ros::Publisher home_pos_pub = nh.advertise<mavros_msgs::HomePosition>("/mavors/home_position/set", 10);
     ros::Publisher updated_coordinates = nh.advertise<geometry_msgs::PoseStamped>("/updated_coordinates", 10);
-    ros::Publisher chatter_pub = nh.advertise<geometry_msgs::PoseStamped>("/updated_coordinates1", 10);
+    ros::Publisher chatter_pub = nh.advertise<geometry_msgs::PoseStamped>("/updated_coordinates0", 10);
     ros::Subscriber current_coords_sub = nh.subscribe<geometry_msgs::PoseStamped>
-            ("/uav1/mavros/local_position/pose", 10, curr_coords_cb);
+            ("/uav0/mavros/local_position/pose", 10, curr_coords_cb);
     ros::Subscriber observer_sub = nh.subscribe<nav_msgs::Odometry>("/observer/odom", 10, observer_cb);
 
     ros::Rate rate(10.0);

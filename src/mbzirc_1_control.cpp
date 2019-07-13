@@ -159,7 +159,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (got_new_coordinates == 1 && distance_to_next <= 0.5) {
+        if (got_new_coordinates == 1) {
             last_coords = global_pose;
             global_pose = updated_coords;
             cout << "Got new Coordinates" << global_pose.pose.position.x << global_pose.pose.position.y << global_pose.pose.position.z << endl;
