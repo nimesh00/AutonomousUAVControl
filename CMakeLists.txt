@@ -144,6 +144,8 @@ add_executable(mbzirc_2_control src/mbzirc_2_control.cpp)
 add_executable(mbzirc_3_control src/mbzirc_3_control.cpp)
 add_executable(survivor_detector src/survivor_detector.cpp)
 add_executable(position_control_px4 src/position_control_px4.cpp)
+add_executable(velocity_control_px4_tanh src/velocity_control_px4_tanh.cpp)
+add_executable(velocity_control_px4_sigmoid src/velocity_control_px4_sigmoid.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -190,6 +192,13 @@ target_link_libraries(survivor_detector
 target_link_libraries(position_control_px4
   ${catkin_LIBRARIES}
 )
+target_link_libraries(velocity_control_px4_tanh
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(velocity_control_px4_sigmoid
+  ${catkin_LIBRARIES}
+)
+
 #############
 ## Install ##
 #############
